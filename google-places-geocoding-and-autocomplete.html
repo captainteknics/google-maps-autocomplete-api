@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>New Google Places API Autocomplete with Address Components || Nakibolis Heirs Limited || Binance: captainteknics@gmail.com</title>
+
+    <meta name="description" content=" New Google Places API Autocomplete with Address Components || Nakibolis Heirs Limited">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+          <h1>Google Place Autocomplete exemple</h1>
+
+          <a href="https://github.com/captainteknics">Source</a>
+          <hr>
+
+          <form role="form" class="form-horizontal">
+            <fieldset>
+              
+               <div class="form-group">
+                <label class="col-sm-4 control-label">Enter Location</label>
+                <div class="col-sm-8">
+                  <input id="user_input_autocomplete_address" name="user_input_autocomplete_address"
+                         class="form-control" placeholder="Start typing your address...">
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset class="disabled">
+              <div class="form-group">
+                <label class="col-sm-4 control-label"><code>Town</code></label>
+                <div class="col-sm-8">
+                  <input id="locality" name="locality" disabled="true" class="form-control">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label"><code>County</code></label>
+                <div class="col-sm-8">
+                  <input id="administrative_area_level_1" name="administrative_area_level_1" disabled="true" class="form-control">
+                </div>
+              </div>
+              
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label"><code>country</code></label>
+                <div class="col-sm-8">
+                  <input id="country" name="country" disabled="true" class="form-control">
+                </div>
+              </div>
+
+              <!-- Get Coors; Geometry: Location (latitude and longitude) -->
+
+              <div class="form-group">
+                <label class="col-sm-4 control-label"><code>latLng</code></label>
+                <div class="col-sm-8">
+                  <input id="latLng" name="latLng" disabled="true" class="form-control">
+                </div>
+              </div>
+
+
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+   
+
+    <!-- Include Google Maps JS API -->
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?libraries=places&key=YOUR_API_KEY"></script>
+
+
+        
+
+    <!-- Custom JS code to bind to Autocomplete API -->
+
+
+
+     <!-- Autocomplete js  -->
+
+     <script async defer>
+        function initializeAutocomplete(id) {
+          var element = document.getElementById(id);
+          if (element) {
+            var autocomplete = new google.maps.places.Autocomplete(element, { types: ['geocode'] });
+            google.maps.event.addListener(autocomplete, 'place_changed', onPlaceChanged);
+          }
+        }
+      
+        function onPlaceChanged() {
+          var place = this.getPlace();
+      
+          // console.log(place);  // Uncomment this line to view the full object returned by Google API.
+      
+          for (var i in place.address_components) {
+            var component = place.address_components[i];
+            for (var j in component.types) {  // Some types are ["country", "political"]
+              var type_element = document.getElementById(component.types[j]);
+              if (type_element) {
+                type_element.value = component.long_name;
+              }
+            }
+          }
+      
+          // Display latitude and longitude
+          var latLngElement = document.getElementById('latLng');
+          if (latLngElement) {
+            latLngElement.value = place.geometry.location.lat() + ', ' + place.geometry.location.lng();
+          }
+        }
+      
+        google.maps.event.addDomListener(window, 'load', function() {
+          initializeAutocomplete('user_input_autocomplete_address');
+        });
+      </script>
+      
+  
+  </body>
+</html>
